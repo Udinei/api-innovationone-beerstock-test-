@@ -44,25 +44,33 @@ public class BeerControllerTest {
                 .build();
     }
 
+    private BeerDTO getBeerDTO() {
+        BeerDTO beerDTO = BeerDTOBuilder.builder().build().toBeerDTO();
+        return beerDTO;
+    }
+
+
     @Test
     void whenPOSTIsCalledThenABeerIsCreated() throws Exception {
         // metodo builder é criado e gerenciado pelo lombok
         // given
-        BeerDTO beerDTO = BeerDTOBuilder.builder().build().toBeerDTO();
+        BeerDTO beerDTO = getBeerDTO();
 
         // when
         when(beerService.createBeer(beerDTO)).thenReturn(beerDTO);
 
-              mockMvc.perform(post(BEER_API_URL_PATH)
+        //then
+        mockMvc.perform(post(BEER_API_URL_PATH)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(beerDTO)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name", is(beerDTO.getName())))
                 .andExpect(jsonPath("$.brand", is(beerDTO.getBrand())))
                 .andExpect(jsonPath("$.type", is(beerDTO.getType().toString())));
-
-
     }
+
+
+
 
 
 
