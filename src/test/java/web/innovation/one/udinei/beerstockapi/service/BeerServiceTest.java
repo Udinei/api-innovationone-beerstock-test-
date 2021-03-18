@@ -10,6 +10,7 @@ import web.innovation.one.udinei.beerstockapi.builder.BeerDTOBuilder;
 import web.innovation.one.udinei.beerstockapi.dto.BeerDTO;
 import web.innovation.one.udinei.beerstockapi.entity.Beer;
 import web.innovation.one.udinei.beerstockapi.exception.BeerAlreadyRegisteredException;
+import web.innovation.one.udinei.beerstockapi.exception.BeerInsufficientStockException;
 import web.innovation.one.udinei.beerstockapi.exception.BeerNotFoundException;
 import web.innovation.one.udinei.beerstockapi.exception.BeerStockExceededException;
 import web.innovation.one.udinei.beerstockapi.mapper.BeerMapper;
@@ -225,6 +226,21 @@ public class BeerServiceTest {
 
     }
 
+    @Test
+    void whenDecrementIsCalledWithInvalidQtdInsufficientThenThrowException() throws BeerInsufficientStockException, BeerNotFoundException  {
+        BeerDTO beerDTO = getBeerDTO();
+        Beer beer = getBeerModel(beerDTO);
+
+        int quantityToDecrement = 10;
+
+        beerDTO.setQuantity(beerDTO.getQuantity() - quantityToDecrement);
+
+        // when
+        when(beerRepository.findById(beerDTO.getId())).thenReturn(Optional.of(beer));
+
+        assertThrows(BeerInsufficientStockException.class, () -> beerService.decrement(beer.getId(), quantityToDecrement));
+
+    }
 
 
 }

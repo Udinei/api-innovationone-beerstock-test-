@@ -7,10 +7,10 @@ import web.innovation.one.udinei.beerstockapi.enums.BeerType;
 
 import javax.persistence.*;
 
-@Data
-@Entity
-@NoArgsConstructor
-@AllArgsConstructor
+@Data // gera gets,sets e toString, equals e hashCode
+@Entity  // realiza o mapeado jpa
+@NoArgsConstructor // cria um construtor padrao vazio
+@AllArgsConstructor // Gera um construtor com todos atributos
 public class Beer {
 
    @Id
